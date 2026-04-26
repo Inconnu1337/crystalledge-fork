@@ -1,0 +1,131 @@
+
+- type: entity
+  id: CESoulShardInfinite
+  name: soul essence
+  description: A fragment of the soul that can be offered as a gift to sacred statues in exchange for powerful blessings
+  suffix: Infinite
+  categories: [ ForkFiltered ]
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Effects/soul.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 1.5
+    energy: 10
+    netsync: false
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 1.5
+    angularDamping: 1.5
+    fixedRotation: true
+  - type: Fixtures
+    fixtures:
+      # Hard collider against walls only — stops souls from flying through impassable
+      # terrain when they get a scatter impulse on death.
+      # Layer = InteractImpassable: matched by walls' FullTileMask, but NOT by chasm's
+      # ItemMask or any mob mask. Result: souls bounce off walls but pass through chasms
+      # and mobs without blocking them.
+      wallStop:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.15
+        density: 5
+        hard: true
+        layer:
+        - InteractImpassable
+        mask: []
+      # Sensor that triggers OnStartCollide for the player but doesn't block them.
+      pickup:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        hard: false
+        layer: []
+        mask:
+        - MobLayer
+  - type: CEEphemeralCollectable
+    collectVfx: CEEffectSoulCollect
+    collectSound:
+      path: /Audio/_CE/Effects/soul_pickup.ogg
+      params:
+        variation: 0.03
+    effects:
+    - !type:AddSoul
+      effectTarget: Target
+      amount: 1
+  - type: CEAutoFloatingVisuals
+    animationTime: 1
+    floatingStartOffset: "0.0,0.0"
+    floatingOffset: "0.0,0.2"
+
+- type: entity
+  id: CESoulShard
+  parent: CESoulShardInfinite
+  suffix: 2 minute lifetime
+  components:
+  - type: CESoulCollectable
+  - type: TimedDespawn
+    lifetime: 120
+
+
+- type: entity
+  id: CEEffectSoulCollect
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/soul_collect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+# Pure visual particle used by the soul-transfer animation. Spawned client-side
+# by CEClientSoulTransferAnimationSystem, never exists on the server. No physics,
+# no networking, no interaction — just a sprite + light that gets moved by the
+# animation system each frame.
+- type: entity
+  id: CESoulTransferParticle
+  name: soul fragment
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Effects/soul.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 1
+    energy: 2
+    netsync: false
