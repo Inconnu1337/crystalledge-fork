@@ -17,6 +17,24 @@
             CEWanderer: [ -1, -1 ]
 
 - type: gameMap
+  id: CEEmpty
+  mapName: Empty
+  mapPath: /Maps/_CE/Empty.yml
+  minPlayers: 0
+  stations:
+    Empty:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Empty"
+        - type: StationJobs
+          availableJobs:
+            CEKnight: [ -1, -1 ]
+            CEMage: [ -1, -1 ]
+            CEPriest: [ -1, -1 ]
+            CEWanderer: [ -1, -1 ]
+
+- type: gameMap
   id: Dev
   mapName: Dev
   mapPath: /Maps/_CE/Dev/Dev0.yml
