@@ -22,6 +22,10 @@ public sealed partial class DefaultGameScreen : InGameScreen
         SetAnchorAndMarginPreset(Hotbar, LayoutPreset.BottomWide, margin: 5);
         SetAnchorAndMarginPreset(Chat, LayoutPreset.TopRight, margin: 10);
         SetAnchorAndMarginPreset(Alerts, LayoutPreset.TopRight, margin: 10);
+        // Minimap: top-left, just below the system buttons (TopBar) row.
+        SetAnchorAndMarginPreset(Minimap, LayoutPreset.TopLeft, margin: 10);
+        UpdateMinimapPosition();
+        TopBar.OnResized += UpdateMinimapPosition;
 
         // CrystallEdge - mana and health spheres
         var gap = 310f;
@@ -46,6 +50,11 @@ public sealed partial class DefaultGameScreen : InGameScreen
         // Shift left by half width so the bar is truly centered
         SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);
         SetMarginRight(StaminaBar, StaminaBar.MinSize.X / 2f);
+
+        // Actions bar: always horizontal, placed above the stamina/hotbar area.
+        SetAnchorPreset(Actions, LayoutPreset.BottomWide);
+        SetMarginLeft(Actions, 0);
+        SetMarginRight(Actions, 0);
         // CrystallEdge end
 
         Chat.OnResized += ChatOnResized;
@@ -53,12 +62,35 @@ public sealed partial class DefaultGameScreen : InGameScreen
 
         MainViewport.OnResized += ResizeActionContainer;
         Inventory.OnResized += ResizeActionContainer;
+        Hotbar.OnResized += ResizeActionContainer;
+
+        ResizeActionContainer();
     }
 
     private void ResizeActionContainer()
     {
-        float indent = Inventory.Size.Y + TopBar.Size.Y + 40;
-        Actions.ActionsContainer.MaxGridHeight = MainViewport.Size.Y - indent;
+        float indent = 20;
+        var maxWidth = MainViewport.Size.X - indent;
+        if (maxWidth > 0)
+            Actions.ActionsContainer.MaxGridWidth = maxWidth;
+
+        var staminaTop = 80f + StaminaBar.MinSize.Y;
+        var hotbarTop = 5f + Hotbar.Size.Y;
+        var actionHeight = MathF.Max(Actions.MinSize.Y, 64f);
+        var actionBottomOffset = MathF.Max(staminaTop, hotbarTop) + 8f - actionHeight / 2f;
+        SetMarginBottom(Actions, -actionBottomOffset);
+        SetMarginTop(Actions, -actionBottomOffset - actionHeight);
+    }
+
+    private void UpdateMinimapPosition()
+    {
+        // Position the minimap directly below the system buttons (TopBar) row.
+        var topBarHeight = MathF.Max(TopBar.Size.Y, TopBar.MinSize.Y);
+        var top = topBarHeight + 15f;
+        SetMarginTop(Minimap, top);
+        SetMarginBottom(Minimap, top + Minimap.MinSize.Y);
+        SetMarginLeft(Minimap, 10f);
+        SetMarginRight(Minimap, 10f + Minimap.MinSize.X);
     }
 
     private void ChatOnResizeFinish(Vector2 _)

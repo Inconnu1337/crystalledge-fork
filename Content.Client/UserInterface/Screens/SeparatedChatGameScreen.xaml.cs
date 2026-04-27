@@ -27,6 +27,10 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(Ghost, LayoutPreset.BottomWide, margin: 80);
         SetAnchorAndMarginPreset(Hotbar, LayoutPreset.BottomWide, margin: 5);
         SetAnchorAndMarginPreset(Alerts, LayoutPreset.CenterRight, margin: 10);
+        // Minimap: top-left, just below the system buttons (TopBar) row.
+        SetAnchorAndMarginPreset(Minimap, LayoutPreset.TopLeft, margin: 10);
+        UpdateMinimapPosition();
+        TopBar.OnResized += UpdateMinimapPosition;
 
         // CrystallEdge - mana and health spheres
         var gap = 310f;
@@ -49,18 +53,46 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 80);
         SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);
         SetMarginRight(StaminaBar, StaminaBar.MinSize.X / 2f);
+
+        // Actions bar: always horizontal, placed above the stamina/hotbar area.
+        SetAnchorPreset(Actions, LayoutPreset.BottomWide);
+        SetMarginLeft(Actions, 0);
+        SetMarginRight(Actions, 0);
         // CrystallEdge end
 
         ScreenContainer.OnSplitResizeFinished += () =>
             OnChatResized?.Invoke(new Vector2(ScreenContainer.SplitFraction, 0));
 
         ViewportContainer.OnResized += ResizeActionContainer;
+        Hotbar.OnResized += ResizeActionContainer;
+
+        ResizeActionContainer();
     }
 
     private void ResizeActionContainer()
     {
         float indent = 20;
-        Actions.ActionsContainer.MaxGridWidth = ViewportContainer.Size.X - indent;
+        var maxWidth = ViewportContainer.Size.X - indent;
+        if (maxWidth > 0)
+            Actions.ActionsContainer.MaxGridWidth = maxWidth;
+
+        var staminaTop = 80f + StaminaBar.MinSize.Y;
+        var hotbarTop = 5f + Hotbar.Size.Y;
+        var actionHeight = MathF.Max(Actions.MinSize.Y, 64f);
+        var actionBottomOffset = MathF.Max(staminaTop, hotbarTop) + 8f - actionHeight / 2f;
+        SetMarginBottom(Actions, -actionBottomOffset);
+        SetMarginTop(Actions, -actionBottomOffset - actionHeight);
+    }
+
+    private void UpdateMinimapPosition()
+    {
+        // Position the minimap directly below the system buttons (TopBar) row.
+        var topBarHeight = MathF.Max(TopBar.Size.Y, TopBar.MinSize.Y);
+        var top = topBarHeight + 15f;
+        SetMarginTop(Minimap, top);
+        SetMarginBottom(Minimap, top + Minimap.MinSize.Y);
+        SetMarginLeft(Minimap, 10f);
+        SetMarginRight(Minimap, 10f + Minimap.MinSize.X);
     }
 
     public override ChatBox ChatBox => GetWidget<ChatBox>()!;
