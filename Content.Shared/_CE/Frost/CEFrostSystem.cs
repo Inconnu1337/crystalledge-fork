@@ -1,3 +1,4 @@
+using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Fire;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
@@ -35,17 +36,8 @@ public sealed class CEFrostSystem : EntitySystem
         SubscribeLocalEvent<CEFreezableComponent, CEFreezedEvent>(OnFreezableFreezed);
         SubscribeLocalEvent<CEFreezableComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
 
-        SubscribeLocalEvent<CEFreezeImmunityStatusEffectComponent, StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent>>(OnFreezeImmunity);
-
         // Tile attempt: fire entities block frost tile placement (fire is extinguished).
         SubscribeLocalEvent<CEFireComponent, CEFreezeTileAttemptEvent>(OnFireFreezeTileAttempt);
-    }
-
-    private void OnFreezeImmunity(Entity<CEFreezeImmunityStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent> args)
-    {
-        var inner = args.Args;
-        inner.Cancelled = true;
-        args.Args = inner;
     }
 
     /// <summary>
@@ -127,6 +119,7 @@ public sealed class CEFrostSystem : EntitySystem
     /// Raises a <see cref="CEFreezedEvent"/> on the target entity.
     /// Entities with freezing-related components handle the event to apply their effects.
     /// </summary>
+    [Obsolete("Need be converted to ApplyStatusEffect")]
     public void FreezeEntity(EntityUid target, int stack = 1, int? maxStack = null, TimeSpan? duration = null)
     {
         if (stack <= 0)
@@ -141,6 +134,15 @@ public sealed class CEFrostSystem : EntitySystem
         if (attemptEv.Cancelled)
             return;
         stack = attemptEv.Stacks;
+
+        // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
+        if (TryComp<CEFreezableComponent>(target, out var freezable))
+        {
+            var stackAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, freezable.StatusEffect, stack, duration);
+            RaiseLocalEvent(target, stackAttempt);
+            if (stackAttempt.Cancelled)
+                return;
+        }
 
         var freezedEv = new CEFreezedEvent(stack, maxStack, duration);
         RaiseLocalEvent(target, ref freezedEv);
@@ -243,6 +245,7 @@ public sealed class CEFrostSystem : EntitySystem
 /// Handlers can modify Stacks or set Cancelled to prevent freezing.
 /// </summary>
 [ByRefEvent]
+[Obsolete("We need to transition to a more modular system.")]
 public record struct CEFreezeEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
 
 /// <summary>
