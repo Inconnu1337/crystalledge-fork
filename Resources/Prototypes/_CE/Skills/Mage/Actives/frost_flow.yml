@@ -153,5 +153,5 @@
             Cold: 10
     - !type:FreezeArea
       radius: 1.5
-      maxStacks: 10
+      maxStacks: 5
       fallOffFactor: 1
