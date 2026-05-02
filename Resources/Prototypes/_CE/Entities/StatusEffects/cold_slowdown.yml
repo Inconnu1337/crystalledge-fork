@@ -23,7 +23,7 @@
     speed: 0.8
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
     noRot: true
     layers:
     - state: effect

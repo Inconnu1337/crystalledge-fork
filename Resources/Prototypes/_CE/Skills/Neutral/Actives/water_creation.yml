@@ -4,6 +4,11 @@
   weight: 0.5
   effect: !type:AddAction
     action: CEActionWaterCreation
+  restrictions:
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEPriest # Priest have more powerful analogue of this skill (waterblast)
 
 - type: entity
   id: CEActionWaterCreation
