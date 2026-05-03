@@ -14,6 +14,5 @@ Small fixes/refactors are exempt. Media may be used in SS14 progress reports wit
 **Changelog**
 :cl:
 - add: Added fun!
-- remove: Removed fun!
 - tweak: Changed fun!
 - fix: Fixed fun!
