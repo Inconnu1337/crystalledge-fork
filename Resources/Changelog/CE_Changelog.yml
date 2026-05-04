@@ -3,13 +3,6 @@
   changes:
   - message: Added fun!
     type: Add
-  id: 10000
-  time: '2026-05-04T09:55:55.0000000+00:00'
-  url: https://github.com/crystallpunk-14/crystalledge/pull/205
-- author: TheShuEd
-  changes:
-  - message: Added fun!
-    type: Add
   - message: Removed fun!
     type: Remove
   - message: Changed fun!
@@ -19,3 +12,17 @@
   id: 16
   time: '2026-05-04T18:13:42.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/206
+- author: TheShuEd
+  changes:
+  - message: Added fun!
+    type: Add
+  id: 10000
+  time: '2026-05-04T09:55:55.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/205
+- author: TheShuEd
+  changes:
+  - message: I think changelogs should work now
+    type: Add
+  id: 10001
+  time: '2026-05-04T19:17:59.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/207
