@@ -51,3 +51,18 @@
   id: 10004
   time: '2026-05-05T10:31:45.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/211
+- author: TheShuEd
+  changes:
+  - message: Player mana, all manacostes and mana restoring sources multiplied by
+      5. So, we have 100 mana instead 20 by default.
+    type: Tweak
+  - message: Gnomes now have mana and use it to heal themselves. As a result, gnomes'
+      healing is now limited.
+    type: Tweak
+  - message: Fixed a bug where the Cursed Staff would curse the user when used
+    type: Fix
+  - message: Disabled vanilla ambient music
+    type: Remove
+  id: 10005
+  time: '2026-05-05T11:29:58.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/212
