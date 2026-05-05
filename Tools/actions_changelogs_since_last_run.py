@@ -50,8 +50,8 @@ def main():
         cur_changelog = yaml.safe_load(f)
 
     print("[DEBUG] Calculating changelog diff")
-    diff = diff_changelog(last_changelog, cur_changelog)
-    print(f"[DEBUG] Found {len(list(diff))} new entries in changelog diff")
+    diff = list(diff_changelog(last_changelog, cur_changelog))
+    print(f"[DEBUG] Found {len(diff)} new entries in changelog diff")
 
     message_lines = changelog_entries_to_message_lines(diff)
     print("[DEBUG] Sending message lines to Discord")
@@ -219,7 +219,7 @@ def send_message_lines(message_lines: list[str]):
     print(f"[DEBUG] chunk_lines = {chunk_lines}")
     print(f"[DEBUG] chunk_length = {chunk_length}")
 
-    for line in message_lines:
+    for idx, line in enumerate(message_lines):
         print("\n[DEBUG] ---- Processing new line ----")
         print(f"[DEBUG] Line index: {idx}")
         print(f"[DEBUG] Line content: {repr(line)}")
