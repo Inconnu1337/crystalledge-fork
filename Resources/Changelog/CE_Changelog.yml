@@ -76,3 +76,12 @@
   id: 10009
   time: '2026-05-06T13:58:05.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/220
+- author: TheShuEd
+  changes:
+  - message: Bonfires have been added to safe zones. Each player can interact with
+      a bonfire once to fully restore their mana, health, and the charges of all their
+      items.
+    type: Add
+  id: 10010
+  time: '2026-05-06T19:53:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/221
