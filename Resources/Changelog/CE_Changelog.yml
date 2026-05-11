@@ -177,3 +177,32 @@
   id: 10016
   time: '2026-05-08T21:14:55.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/227
+- author: TheShuEd
+  changes:
+  - message: "A new active spell for the Warrior, \u201CWave of Spikes,\u201D has\
+      \ been added\u2014it covers an area with stone spikes that deal damage on contact"
+    type: Add
+  - message: "A new passive skill for the Warrior, \u201CAgility,\u201D has been added.\
+      \ It increases movement speed after taking"
+    type: Add
+  - message: The number of standard magic staff projectiles is once again unlimited
+    type: Tweak
+  - message: "The warrior's active spell \u201CRaise Shields\u201D has been buffed\u2014\
+      the number of shields granted has been increased from 25 to 35"
+    type: Tweak
+  - message: "The warrior's active skill \u201CCruelty\u201D has been buffed\u2014\
+      it now costs 10 mana instead of 20"
+    type: Tweak
+  - message: "The warrior's active skill \u201CFlame Absorption\u201D has been removed."
+    type: Remove
+  - message: "The warrior's active skill \u201CAmplification\u201D has been removed."
+    type: Remove
+  - message: "The warrior's active skill \u201CRaging fury\u201D has been removed."
+    type: Remove
+  - message: Fixed doors that open with a delay
+    type: Fix
+  - message: Fixed a bug that caused mobs to take double damage from spikes
+    type: Fix
+  id: 10017
+  time: '2026-05-11T13:44:39.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/229
