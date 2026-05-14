@@ -1,7 +1,7 @@
 - type: skill
   parent: BaseNeutralSkill
   id: Kiss
-  weight: 100
+  weight: 0.1
   effect: !type:AddAction
     action: CEActionSpellKiss
 
