@@ -1,0 +1,62 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: Kiss
+  weight: 100
+  effect: !type:AddAction
+    action: CEActionSpellKiss
+
+- type: entity
+  id: CEActionSpellKiss
+  parent: CEActionSpellBase
+  name: Kiss
+  description: The best blessing in your life. Whatever you do, don’t kiss Robin.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: Action
+    useDelay: 60
+    icon:
+      sprite: _CE/Skills/todo.rsi
+      state: icon
+  - type: TargetAction
+    range: 1
+    interactOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationKiss
+
+- type: entityEffectAnimation
+  id: AnimationKiss
+  duration: 0.4
+  lockRotation: true
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      spawns:
+      - CEEffectKiss
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/kiss.ogg
+        params:
+          variation: 0.1
+          volume: 20
+
+- type: entity
+  parent: CEBaseMagicImpact
+  id: CEEffectKiss
+  name: kiss
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/kiss.rsi
+    scale: 0.6, 0.6
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 0.4
